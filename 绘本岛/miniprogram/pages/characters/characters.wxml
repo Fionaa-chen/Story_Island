@@ -1,0 +1,159 @@
+<!--pages/characters/characters.wxml · 蜡笔绘本风-->
+<view class="page-container paper-texture">
+  <!-- 书籍头部信息 -->
+  <view class="book-header" style="background: {{book.bgGradient}};">
+    <view class="header-texture"></view>
+    <view class="header-content">
+      <image class="header-cover" src="{{book.cover}}" mode="aspectFill" />
+      <view class="header-info">
+        <view class="header-title">{{book.title}}</view>
+        <view class="header-author">{{book.author}}</view>
+        <view class="header-desc">{{book.description}}</view>
+      </view>
+    </view>
+    <!-- 手绘装饰 -->
+    <view class="header-deco-wrap">
+      <text class="header-deco-star">✦</text>
+      <text class="header-deco-star s2">✧</text>
+    </view>
+  </view>
+
+  <!-- 步骤指示器 · 蜡笔涂画风 -->
+  <view class="step-indicator">
+    <view class="step {{step >= 1 ? 'active' : ''}}" style="{{step >= 1 ? 'background:' + book.color + '; border-color:' + book.color : ''}}">
+      <text class="step-num">1</text>
+    </view>
+    <view class="step-line-wrap">
+      <view class="step-line {{step >= 2 ? 'active' : ''}}" style="{{step >= 2 ? 'background:' + book.color : ''}}"></view>
+    </view>
+    <view class="step {{step >= 2 ? 'active' : ''}}" style="{{step >= 2 ? 'background:' + book.color + '; border-color:' + book.color : ''}}">
+      <text class="step-num">2</text>
+    </view>
+  </view>
+
+  <!-- 步骤1：选择扮演角色 -->
+  <block wx:if="{{step === 1}}">
+    <view class="section-title">
+      <text class="section-icon">🎭</text>
+      <text class="section-text">选择你要扮演的角色</text>
+      <view class="section-underline" style="background: {{book.color}};"></view>
+    </view>
+
+    <view class="role-list">
+      <view 
+        wx:for="{{roles}}" 
+        wx:key="id"
+        class="role-card {{selectedRoleIndex === index ? 'selected' : ''}}"
+        style="{{selectedRoleIndex === index ? 'border-color:' + book.color : ''}}; transform: rotate({{index % 2 === 0 ? '-0.3' : '0.3'}}deg);"
+        data-index="{{index}}"
+        bindtap="onRoleTap"
+      >
+        <!-- 选中标记 · 蜡笔圈圈 -->
+        <view 
+          wx:if="{{selectedRoleIndex === index}}" 
+          class="role-check"
+          style="background: {{book.color}};"
+        >✓</view>
+
+        <!-- 角色头像 · 蜡笔粗描边 -->
+        <view class="role-avatar-section">
+          <view class="role-avatar-wrap" style="border-color: {{book.color}};">
+            <image class="role-avatar" src="{{item.avatar}}" mode="aspectFill" />
+          </view>
+        </view>
+
+        <!-- 角色信息 -->
+        <view class="role-info">
+          <view class="role-name-row">
+            <text class="role-name">{{item.name}}</text>
+            <view class="role-title-badge" style="background: {{book.color}};">
+              {{item.title}}
+            </view>
+          </view>
+          <view class="role-personality">{{item.personality}}</view>
+          <view class="role-desc">{{item.description}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 确认按钮 · 蜡笔填色 -->
+    <view class="bottom-action">
+      <view 
+        class="action-btn {{selectedRoleIndex >= 0 ? 'active' : 'disabled'}}"
+        style="background: {{selectedRoleIndex >= 0 ? book.color : ''}};"
+        bindtap="onConfirmRole"
+      >
+        <text>确认身份，选择剧情</text>
+        <text class="action-arrow">›</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 步骤2：选择剧情场景 -->
+  <block wx:if="{{step === 2}}">
+    <view class="section-title">
+      <view class="back-btn" bindtap="onBackToRole">
+        <text class="back-arrow">‹</text>
+        <text>重选角色</text>
+      </view>
+      <view class="current-role">
+        <image class="current-role-avatar" src="{{roles[selectedRoleIndex].avatar}}" mode="aspectFill" />
+        <text>扮演：{{roles[selectedRoleIndex].name}}</text>
+      </view>
+    </view>
+
+    <view class="section-title">
+      <text class="section-icon">📖</text>
+      <text class="section-text">选择要进入的剧情</text>
+      <view class="section-underline" style="background: {{book.color}};"></view>
+    </view>
+
+    <view class="scene-list">
+      <view 
+        wx:for="{{scenes}}" 
+        wx:key="id"
+        class="scene-card {{selectedSceneIndex === index ? 'selected' : ''}} {{item.textColorLight ? 'dark-card' : ''}}"
+        style="background: {{item.sceneBg.top || item.bgColor}}; {{selectedSceneIndex === index ? 'border-color:' + book.color : ''}}; transform: rotate({{index % 2 === 0 ? '0.3' : '-0.3'}}deg);"
+        data-index="{{index}}"
+        bindtap="onSceneTap"
+      >
+        <!-- 选中标记 -->
+        <view 
+          wx:if="{{selectedSceneIndex === index}}" 
+          class="scene-check"
+          style="background: {{book.color}};"
+        >✓</view>
+
+        <view class="scene-chapter">{{item.title}}</view>
+        <view class="scene-subtitle">{{item.subtitle}}</view>
+        <view class="scene-desc">{{item.description}}</view>
+        
+        <!-- NPC预览 · 蜡笔标签 -->
+        <view class="scene-npcs">
+          <text class="npc-label">出场角色：</text>
+          <text 
+            wx:for="{{item.npcs}}" 
+            wx:for-item="npc"
+            wx:key="id"
+            class="npc-tag"
+            style="color: {{book.color}}; border-color: {{book.color}}40;"
+          >{{npc.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 开始剧情按钮 -->
+    <view class="bottom-action">
+      <view 
+        class="action-btn {{selectedSceneIndex >= 0 ? 'active' : 'disabled'}}"
+        style="background: {{selectedSceneIndex >= 0 ? book.color : ''}};"
+        bindtap="onStartStory"
+      >
+        <text>🎬 进入剧情</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 底部安全区 -->
+  <view style="height: 160rpx;"></view>
+</view>

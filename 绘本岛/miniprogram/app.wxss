@@ -1,0 +1,160 @@
+/* app.wxss - 绘本岛全局样式 · 蜡笔绘本风 */
+
+page {
+  /* === 主色系 === */
+  --primary-color: #FF6B35;
+  --text-primary: #3B2F2F;
+  --text-secondary: #6B5E5E;
+  --text-hint: #A89B8C;
+  --bg-primary: #FFF8F0;
+  --bg-card: #FFFDF7;
+  --border-color: #E8DDD0;
+
+  /* === 蜡笔装饰色 === */
+  --crayon-blue: #5B8FD4;
+  --crayon-pink: #E8A0BF;
+  --crayon-green: #6BAF7B;
+  --crayon-yellow: #F0C75E;
+  --crayon-orange: #E8935A;
+  --crayon-red: #D96B6B;
+  --crayon-purple: #9B7FCF;
+
+  /* === 阴影 · 暖色系 === */
+  --shadow-light: 0 2rpx 12rpx rgba(139, 109, 80, 0.08);
+  --shadow-card: 0 4rpx 20rpx rgba(139, 109, 80, 0.10);
+  --shadow-card-hover: 0 8rpx 32rpx rgba(139, 109, 80, 0.14);
+
+  /* === 圆角 === */
+  --radius-sm: 16rpx;
+  --radius-md: 24rpx;
+  --radius-lg: 36rpx;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 28rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+/* 通用重置 */
+view, text, image, scroll-view {
+  box-sizing: border-box;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  line-height: inherit;
+  font-size: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+/* 安全区域适配 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 文本省略 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 动画过渡 */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* ============ 蜡笔绘本风辅助类 ============ */
+
+/* 蜡笔手绘风边框（通过 box-shadow 多层模拟不规则线条） */
+.crayon-border {
+  border: 3rpx solid rgba(60, 40, 20, 0.15);
+  box-shadow:
+    2rpx 2rpx 0 0 rgba(60, 40, 20, 0.06),
+    -1rpx 1rpx 0 0 rgba(60, 40, 20, 0.04);
+}
+
+/* 蜡笔卡片：暖白底 + 手绘边框 + 暖色阴影 */
+.crayon-card {
+  background: var(--bg-card);
+  border: 3rpx solid rgba(60, 40, 20, 0.12);
+  box-shadow:
+    0 4rpx 16rpx rgba(139, 109, 80, 0.10),
+    2rpx 2rpx 0 0 rgba(60, 40, 20, 0.05),
+    -1rpx 1rpx 0 0 rgba(60, 40, 20, 0.03);
+  border-radius: var(--radius-lg);
+}
+
+/* 微倾斜手绘感 */
+.crayon-tilt-left {
+  transform: rotate(-0.5deg);
+}
+
+.crayon-tilt-right {
+  transform: rotate(0.5deg);
+}
+
+/* 蜡笔风按钮基础样式 */
+.crayon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  border: 3rpx solid rgba(60, 40, 20, 0.12);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.crayon-btn:active {
+  transform: scale(0.96) rotate(-0.5deg);
+  opacity: 0.9;
+}
+
+/* 蜡笔风标签 */
+.crayon-tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+  border: 2rpx solid rgba(60, 40, 20, 0.10);
+}
+
+/* 手绘风分割线 */
+.crayon-divider {
+  height: 3rpx;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(139, 109, 80, 0.2) 0px,
+    rgba(139, 109, 80, 0.2) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+  border-radius: 2rpx;
+}
+
+/* 纸张纹理背景（通过渐变模拟） */
+.paper-texture {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(210, 180, 140, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(210, 180, 140, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(210, 180, 140, 0.03) 0%, transparent 50%);
+}

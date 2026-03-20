@@ -1,0 +1,1211 @@
+/* pages/story/story.wxss · 毛玻璃沉浸风 */
+
+.story-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* 背景由 wxml inline style 渐变控制 */
+  position: relative;
+}
+
+/* 剧情区域 */
+.story-area {
+  flex: 1;
+  padding: 0;
+  overflow-y: auto;
+}
+
+/* ============ 场景介绍 · 毛玻璃纹理 ============ */
+.scene-intro {
+  padding: 32rpx;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  /* 透明融入页面渐变，仅加微弱遮罩区分层次 */
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* 深色场景下 scene-intro 用深色遮罩 */
+.dark-scene .scene-intro {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.scene-intro-texture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.scene-badge {
+  display: inline-block;
+  font-size: 22rpx;
+  color: #FFFFFF;
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+  margin-bottom: 16rpx;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  border: 2rpx solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 1;
+}
+
+.scene-chapter-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.scene-chapter-subtitle {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 24rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* 玩家角色信息 · 毛玻璃卡片 */
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx;
+  background: rgba(255, 253, 247, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-md);
+  margin-bottom: 16rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.player-avatar-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  border: 4rpx solid;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #F0EDE8;
+  box-shadow: 2rpx 2rpx 0 rgba(60, 40, 20, 0.06);
+}
+
+.player-avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.player-detail {
+  flex: 1;
+}
+
+.player-label {
+  font-size: 22rpx;
+  color: var(--text-hint);
+  margin-bottom: 4rpx;
+}
+
+.player-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  color: var(--text-primary);
+}
+
+/* NPC信息 */
+.npc-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.npc-info-label {
+  font-size: 22rpx;
+  color: var(--text-hint);
+}
+
+.npc-info-tag {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  background: rgba(255, 253, 247, 0.50);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4rpx 14rpx;
+  border-radius: 14rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.30);
+  font-weight: 600;
+}
+
+/* 手绘波浪分割线 */
+.scene-divider {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 8rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.divider-line-crayon {
+  flex: 1;
+  height: 3rpx;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(139, 109, 80, 0.18) 0px,
+    rgba(139, 109, 80, 0.18) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+  border-radius: 2rpx;
+}
+
+.divider-text {
+  font-size: 24rpx;
+  color: var(--text-hint);
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+}
+
+/* ============ 消息通用 ============ */
+.story-message {
+  padding: 0 24rpx;
+  margin-bottom: 24rpx;
+  animation: msgSlideIn 0.4s ease;
+}
+
+@keyframes msgSlideIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ 旁白消息 · 毛玻璃牛皮纸风 ============ */
+.narrator-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  padding: 24rpx;
+  background: rgba(253, 246, 236, 0.70);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-md);
+  border: 2rpx solid rgba(255, 255, 255, 0.35);
+  border-left: 6rpx solid #E8C87A;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.narrator-bubble.typing {
+  border-left-color: rgba(217, 208, 196, 0.7);
+  background: rgba(250, 247, 242, 0.60);
+}
+
+.narrator-icon {
+  font-size: 32rpx;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.narrator-text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* AI思考中 */
+.typing-text {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 26rpx;
+  color: var(--text-hint);
+  font-style: italic;
+}
+
+.typing-dots-inline {
+  display: flex;
+  gap: 6rpx;
+  align-items: center;
+}
+
+.dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: typingBounce 1.4s ease-in-out infinite;
+}
+
+.dot1 { animation-delay: 0s; }
+.dot2 { animation-delay: 0.2s; }
+.dot3 { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { 
+    transform: translateY(0); 
+    opacity: 0.4;
+  }
+  30% { 
+    transform: translateY(-6rpx); 
+    opacity: 1;
+  }
+}
+
+/* ============ NPC对话 · 毛玻璃气泡 + 头像 ============ */
+.npc-bubble-wrap {
+  max-width: 88%;
+  display: flex;
+  gap: 12rpx;
+  align-items: flex-start;
+}
+
+/* NPC 头像列 */
+.npc-avatar-col {
+  flex-shrink: 0;
+  padding-top: 30rpx; /* 与名字标签对齐 */
+}
+
+.npc-avatar-circle {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  border: 3rpx solid;
+  background: rgba(255, 253, 247, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.npc-avatar-emoji {
+  font-size: 28rpx;
+}
+
+/* NPC 内容列 */
+.npc-content-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.npc-name-badge {
+  display: inline-block;
+  font-size: 22rpx;
+  font-weight: 700;
+  padding: 4rpx 18rpx;
+  border-radius: 14rpx 14rpx 0 0;
+  margin-bottom: 0;
+  margin-left: 16rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  border-bottom: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.npc-bubble {
+  padding: 20rpx 24rpx;
+  background: rgba(255, 253, 247, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 6rpx var(--radius-md) var(--radius-md) var(--radius-md);
+  border: 2rpx solid rgba(255, 255, 255, 0.40);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.npc-text {
+  font-size: 30rpx;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+/* ============ 玩家行动 · 毛玻璃主色气泡 ============ */
+.player-bubble-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.player-role-tag {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  font-size: 22rpx;
+  color: var(--text-hint);
+  margin-bottom: 6rpx;
+  margin-right: 8rpx;
+}
+
+.player-mini-avatar {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.player-bubble {
+  max-width: 80%;
+  padding: 20rpx 24rpx;
+  border-radius: var(--radius-md) 6rpx var(--radius-md) var(--radius-md);
+  border: 2rpx solid rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.10);
+}
+
+.player-text {
+  font-size: 30rpx;
+  line-height: 1.7;
+  color: #FFFFFF;
+}
+
+/* 系统提示 · 手写灰字 + 蜡笔分割线 */
+.system-bubble {
+  text-align: center;
+  padding: 12rpx 24rpx;
+}
+
+.system-text {
+  font-size: 24rpx;
+  color: var(--text-hint);
+  font-style: italic;
+}
+
+/* 图片生成进度提示 */
+.round-image-hint {
+  text-align: center;
+  padding: 8rpx 24rpx;
+  animation: fadeInUp 0.3s ease;
+}
+
+.round-image-hint-text {
+  font-size: 22rpx;
+  color: var(--text-hint);
+  font-style: italic;
+}
+
+/* ============ 选项面板 · 毛玻璃风 ============ */
+.choices-panel {
+  padding: 16rpx 24rpx;
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.choices-header {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 16rpx;
+  padding: 0 4rpx;
+}
+
+.choices-icon {
+  font-size: 28rpx;
+}
+
+.choices-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.choice-item {
+  padding: 24rpx;
+  background: rgba(255, 253, 247, 0.80);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2rpx solid rgba(255, 255, 255, 0.40);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.choice-item:active {
+  transform: scale(0.97) !important;
+  opacity: 0.85;
+}
+
+.choice-text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  line-height: 1.5;
+  display: block;
+}
+
+.choice-hint {
+  font-size: 22rpx;
+  color: var(--text-hint);
+  margin-top: 6rpx;
+  display: block;
+  font-style: italic;
+}
+
+/* ============ 自由输入面板 · 毛玻璃风 ============ */
+.custom-input-panel {
+  padding: 16rpx 24rpx;
+  animation: fadeInUp 0.3s ease;
+}
+
+.custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.custom-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.custom-cancel {
+  font-size: 24rpx;
+  color: var(--text-hint);
+  padding: 8rpx 16rpx;
+  background: rgba(255, 253, 247, 0.60);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.30);
+}
+
+.custom-cancel:active {
+  opacity: 0.7;
+  transform: scale(0.96);
+}
+
+.custom-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 8rpx;
+  background: rgba(255, 253, 247, 0.80);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 2rpx solid rgba(255, 255, 255, 0.40);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.custom-input {
+  flex: 1;
+  height: 80rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: var(--text-primary);
+}
+
+.custom-placeholder {
+  color: var(--text-hint);
+  font-size: 28rpx;
+}
+
+.custom-send-btn {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #D9D0C4;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  border: 3rpx solid rgba(255, 255, 255, 0.15);
+}
+
+.custom-send-btn.active:active {
+  transform: scale(0.9) rotate(-5deg);
+}
+
+.send-icon {
+  font-size: 40rpx;
+  color: #FFFFFF;
+  font-weight: 300;
+}
+
+/* ============ 结局相关样式 · 蜡笔水彩风 ============ */
+
+/* 结局分割线 */
+.ending-divider {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 32rpx 24rpx 16rpx;
+  animation: fadeInUp 0.6s ease;
+}
+
+/* 结局选项面板 */
+.ending-choices {
+  padding: 16rpx 24rpx 32rpx;
+}
+
+.ending-choices .choices-header {
+  margin-bottom: 20rpx;
+}
+
+/* 结局选项按钮 */
+.ending-choice-item {
+  background: rgba(255, 253, 247, 0.80);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2rpx solid rgba(255, 255, 255, 0.40) !important;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.ending-choice-item:first-child {
+  background: rgba(253, 246, 236, 0.85);
+  border-color: rgba(232, 200, 122, 0.50) !important;
+}
+
+.ending-choice-item:active {
+  transform: scale(0.97) rotate(-0.5deg) !important;
+  opacity: 0.85;
+}
+
+/* ============ 结局宫格图 ============ */
+
+.ending-grid-section {
+  padding: 24rpx;
+  margin: 0 24rpx 24rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8rpx 32rpx rgba(139, 109, 80, 0.10);
+  animation: fadeInUp 0.6s ease;
+}
+
+/* 加载状态 */
+.grid-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48rpx 24rpx;
+}
+
+.grid-spinner {
+  width: 80rpx;
+  height: 80rpx;
+  border: 6rpx solid rgba(139, 109, 80, 0.1);
+  border-top: 6rpx solid;
+  border-radius: 50%;
+  animation: gridSpin 1s linear infinite;
+}
+
+@keyframes gridSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.grid-loading-text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.grid-loading-hint {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+/* 隐藏的 Canvas */
+.grid-canvas-hidden {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 750px;
+  height: 1334px;
+  pointer-events: none;
+}
+
+/* ============ Tolan 梦幻画卷全屏页 ============ */
+
+.ending-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ending-fullscreen.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 深色底纹背景（由 book.color 衍生，通过 inline style 设置渐变） */
+.ending-fs-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* 渐变由 WXML inline style 控制 */
+  overflow: hidden;
+}
+
+/* 结局名称 · 融入背景的题字 */
+.ending-fs-ambient-title {
+  position: relative;
+  z-index: 2;
+  display: block;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 600;
+  /* 颜色由 WXML inline style 控制 */
+  font-family: 'PingFang SC', 'STKaiti', 'KaiTi', serif;
+  letter-spacing: 6rpx;
+  margin-bottom: 24rpx;
+  padding: 0 40rpx;
+}
+
+/* 关闭按钮 */
+.ending-fs-close {
+  position: fixed;
+  top: 24rpx;
+  right: 24rpx;
+  z-index: 1010;
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 颜色由 WXML inline style 控制 */
+  border-radius: 50%;
+  border: 1rpx solid;
+}
+
+.ending-fs-close-icon {
+  font-size: 26rpx;
+  /* 颜色由 WXML inline style 控制 */
+  font-weight: 600;
+}
+
+/* 中央悬浮画框 */
+.ending-fs-frame {
+  position: relative;
+  z-index: 3;
+  width: calc(100% - 80rpx);
+  max-width: 670rpx;
+  background: #ffffff;
+  /* 边框和阴影由 WXML inline style 控制 */
+  border: 1rpx solid;
+  border-radius: 24rpx;
+  padding: 20rpx;
+  overflow: hidden;
+}
+
+/* 加载状态 */
+.ending-fs-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32rpx 0 16rpx;
+}
+
+.ending-fs-spinner-wrap {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.ending-fs-spinner-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  /* 颜色由 WXML inline style 控制 */
+  animation: spinnerPulse 1.4s ease-in-out infinite;
+}
+
+.ending-fs-spinner-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.ending-fs-spinner-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes spinnerPulse {
+  0%, 60%, 100% { transform: scale(0.7); opacity: 0.4; }
+  30% { transform: scale(1.2); opacity: 1; }
+}
+
+.ending-fs-loading-text {
+  font-size: 26rpx;
+  /* 颜色由 WXML inline style 控制 */
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+}
+
+/* 2行3列网格 */
+.ending-fs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10rpx;
+}
+
+.ending-fs-grid-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: rgba(245, 238, 228, 0.6);
+}
+
+.ending-fs-grid-img {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.ending-fs-grid-img.visible {
+  opacity: 1;
+}
+
+.ending-fs-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 背景由 WXML inline style 控制 */
+}
+
+.placeholder-pulse {
+  width: 40rpx;
+  height: 40rpx;
+  /* 边框颜色由 WXML inline style 控制 */
+  border: 3rpx solid;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(0.8); opacity: 0.4; }
+}
+
+/* 第6格留空 */
+.ending-fs-grid-empty-slot {
+  /* 样式由 WXML inline style 控制 */
+  border: 1rpx dashed;
+}
+
+/* 生成失败 */
+.ending-fs-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 0;
+}
+
+.ending-fs-error-text {
+  font-size: 24rpx;
+  /* 颜色由 WXML inline style 控制 */
+  margin-bottom: 20rpx;
+}
+
+.ending-fs-retry-btn {
+  padding: 16rpx 40rpx;
+  border-radius: 32rpx;
+  /* 颜色由 WXML inline style 控制 */
+  font-size: 26rpx;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.ending-fs-retry-btn:active {
+  transform: scale(0.95);
+  opacity: 0.7;
+}
+
+/* 结局点评 · 融入背景的氛围文字 */
+.ending-fs-ambient-comment {
+  position: relative;
+  z-index: 2;
+  display: block;
+  text-align: center;
+  font-size: 24rpx;
+  /* 颜色由 WXML inline style 控制 */
+  font-family: 'PingFang SC', 'STKaiti', 'KaiTi', serif;
+  font-style: italic;
+  letter-spacing: 2rpx;
+  line-height: 1.8;
+  margin-top: 24rpx;
+  padding: 0 60rpx;
+}
+
+/* 操作按钮 · 极简胶囊 */
+.ending-fs-actions {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  gap: 24rpx;
+  margin-top: 32rpx;
+  padding: 0 60rpx;
+}
+
+.ending-fs-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.ending-fs-action-btn:active {
+  transform: scale(0.96);
+  opacity: 0.8;
+}
+
+.ending-fs-save-btn {
+  /* 颜色由 WXML inline style 控制 */
+  border: 1rpx solid;
+}
+
+.ending-fs-share-btn {
+  /* 颜色由 WXML inline style 控制 */
+  border: 1rpx solid !important;
+  line-height: normal !important;
+  margin: 0 !important;
+  padding: 20rpx 0 !important;
+}
+
+.ending-fs-share-btn::after {
+  display: none;
+}
+
+/* ============ 结局卡片 · 蜡笔水彩风 ============ */
+
+.ending-card {
+  margin: 16rpx 0;
+  padding: 32rpx 28rpx;
+  background: linear-gradient(135deg, #FDF6EC 0%, #FFF8F0 50%, #FDF3E4 100%);
+  border: 3rpx solid rgba(210, 180, 140, 0.35);
+  border-radius: 28rpx;
+  box-shadow:
+    0 6rpx 24rpx rgba(210, 180, 140, 0.15),
+    2rpx 2rpx 0 rgba(139, 109, 80, 0.06);
+  animation: endingCardIn 0.8s ease;
+  transform: rotate(-0.5deg);
+}
+
+@keyframes endingCardIn {
+  from { opacity: 0; transform: translateY(40rpx) scale(0.95) rotate(-2deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(-0.5deg); }
+}
+
+.ending-card-badge {
+  display: inline-block;
+  font-size: 26rpx;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  color: #795548;
+  background: rgba(121, 85, 72, 0.08);
+  padding: 6rpx 20rpx;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  border: 2rpx solid rgba(121, 85, 72, 0.12);
+}
+
+.ending-card-narration {
+  margin-bottom: 24rpx;
+}
+
+.ending-card-narration-text {
+  font-size: 28rpx;
+  color: #4E342E;
+  line-height: 1.9;
+  font-style: italic;
+}
+
+.ending-card-separator {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin: 24rpx 0;
+}
+
+.ending-sep-line {
+  flex: 1;
+  height: 3rpx;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(212, 165, 116, 0.4) 0px,
+    rgba(212, 165, 116, 0.4) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+  border-radius: 2rpx;
+}
+
+.ending-sep-text {
+  font-size: 28rpx;
+  color: #A1887F;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  white-space: nowrap;
+  letter-spacing: 6rpx;
+}
+
+.ending-card-result {
+  text-align: center;
+  margin-bottom: 12rpx;
+}
+
+.ending-card-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  color: #E65100;
+}
+
+.ending-card-comment {
+  text-align: center;
+  padding: 16rpx 20rpx;
+  background: rgba(121, 85, 72, 0.04);
+  border-radius: 14rpx;
+  border-left: 5rpx solid var(--crayon-yellow);
+  border: 3rpx solid rgba(121, 85, 72, 0.06);
+  border-left: 5rpx solid var(--crayon-yellow);
+}
+
+.ending-card-comment-text {
+  font-size: 26rpx;
+  color: #6D4C41;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* ============ 结局底部 Tab 栏 · 毛玻璃风 ============ */
+
+.ending-tab-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  gap: 16rpx;
+  padding: 16rpx 24rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  background: rgba(255, 248, 240, 0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 -2rpx 16rpx rgba(0, 0, 0, 0.06);
+  animation: tabBarSlideUp 0.5s ease;
+}
+
+@keyframes tabBarSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.ending-tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 16rpx 8rpx;
+  border-radius: 20rpx;
+  background: rgba(139, 109, 80, 0.06);
+  transition: all 0.2s ease;
+  border: 2rpx solid rgba(139, 109, 80, 0.08);
+}
+
+.ending-tab-item:active {
+  transform: scale(0.95) rotate(-0.5deg);
+  opacity: 0.85;
+}
+
+.ending-tab-item.tab-primary {
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.12);
+}
+
+.ending-tab-item.tab-primary .ending-tab-label {
+  color: #FFFFFF;
+}
+
+.ending-tab-icon {
+  font-size: 36rpx;
+}
+
+.ending-tab-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--text-secondary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+/* ============ 深色场景主题覆盖 ============ */
+/* 当 scene.textColorLight = true 时，story-page 会加上 .dark-scene class */
+
+.dark-scene .scene-chapter-title,
+.dark-scene .scene-chapter-subtitle,
+.dark-scene .player-label,
+.dark-scene .player-name,
+.dark-scene .npc-info-label {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.dark-scene .player-info {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-scene .player-label {
+  color: rgba(255, 255, 255, 0.60);
+}
+
+.dark-scene .npc-info-tag {
+  color: rgba(255, 255, 255, 0.80);
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-scene .divider-line-crayon {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.20) 0px,
+    rgba(255, 255, 255, 0.20) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+}
+
+.dark-scene .divider-text {
+  color: rgba(255, 255, 255, 0.60);
+}
+
+/* 深色场景下气泡调整 */
+.dark-scene .narrator-bubble {
+  background: rgba(30, 30, 50, 0.55);
+  border-color: rgba(255, 255, 255, 0.12);
+  border-left-color: rgba(232, 200, 122, 0.70);
+}
+
+.dark-scene .narrator-text,
+.dark-scene .narrator-icon {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.dark-scene .npc-bubble {
+  background: rgba(40, 40, 60, 0.55);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark-scene .npc-text {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.dark-scene .npc-avatar-circle {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.dark-scene .system-text {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+.dark-scene .typing-text {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+/* 深色场景下选项面板 */
+.dark-scene .choices-title {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.dark-scene .choice-item {
+  background: rgba(40, 40, 60, 0.55);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark-scene .choice-text {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.dark-scene .choice-hint {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+/* 深色场景下输入框 */
+.dark-scene .custom-title {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.dark-scene .custom-cancel {
+  color: rgba(255, 255, 255, 0.60);
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-scene .custom-input-wrap {
+  background: rgba(40, 40, 60, 0.55);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark-scene .custom-input {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.dark-scene .custom-placeholder {
+  color: rgba(255, 255, 255, 0.40);
+}
+
+.dark-scene .player-role-tag {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+.dark-scene .round-image-hint-text {
+  color: rgba(255, 255, 255, 0.50);
+}

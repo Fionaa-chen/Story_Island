@@ -1,0 +1,118 @@
+<!--pages/bookshelf/bookshelf.wxml · 蜡笔绘本风-->
+<view class="page-container paper-texture">
+  <!-- 手绘装饰元素 -->
+  <view class="deco-stars">
+    <text class="deco-star star1">✦</text>
+    <text class="deco-star star2">✧</text>
+    <text class="deco-star star3">✦</text>
+  </view>
+
+  <!-- 顶部标题区 -->
+  <view class="header">
+    <view class="header-top">
+      <view class="app-logo">📖</view>
+      <view class="app-title">绘本岛</view>
+      <view class="header-deco">~</view>
+    </view>
+    <view class="app-subtitle">选一本书，成为书中的角色，改写经典</view>
+    <view class="subtitle-underline"></view>
+  </view>
+
+  <!-- 书籍轮播 -->
+  <swiper 
+    class="book-swiper"
+    indicator-dots="{{false}}"
+    circular="{{true}}"
+    current="{{currentBookIndex}}"
+    bindchange="onSwiperChange"
+    previous-margin="60rpx"
+    next-margin="60rpx"
+    easing-function="easeInOutCubic"
+    duration="400"
+  >
+    <swiper-item 
+      wx:for="{{books}}" 
+      wx:key="id"
+      class="swiper-item"
+    >
+      <view 
+        class="book-card {{currentBookIndex === index ? 'active' : 'inactive'}}"
+        data-book-id="{{item.id}}"
+        bindtap="onBookTap"
+      >
+        <!-- 书籍封面 -->
+        <view class="book-cover-wrap">
+          <view class="book-cover" style="background: {{item.bgGradient}};">
+            <image 
+              class="cover-image" 
+              src="{{item.cover}}" 
+              mode="aspectFill"
+              binderror=""
+            />
+            <!-- 蜡笔纸质纹理覆盖层 -->
+            <view class="cover-texture"></view>
+            <view class="cover-overlay">
+              <view class="book-title-on-cover">{{item.title}}</view>
+            </view>
+          </view>
+          <!-- 书脊效果 · 蜡笔涂抹风 -->
+          <view class="book-spine" style="background: {{item.color}};"></view>
+        </view>
+
+        <!-- 书籍信息 -->
+        <view class="book-info">
+          <view class="book-title">{{item.title}}</view>
+          <view class="book-author">{{item.author}}</view>
+          <view class="book-desc">{{item.description}}</view>
+          
+          <!-- 角色与剧情预览 -->
+          <view class="preview-section">
+            <view class="character-preview">
+              <view class="character-avatars">
+                <view 
+                  wx:for="{{item.roles}}" 
+                  wx:for-item="char"
+                  wx:key="id"
+                  class="mini-avatar-wrap"
+                  style="margin-left: {{index > 0 ? '-16rpx' : '0'}}; z-index: {{3 - index}};"
+                >
+                  <image class="mini-avatar" src="{{char.avatar}}" mode="aspectFill" />
+                </view>
+              </view>
+              <text class="character-count">{{item.roles.length}} 个角色可扮演</text>
+            </view>
+            <view class="scene-count">
+              <text class="scene-count-icon">🎬</text>
+              <text>{{item.scenes.length}} 个剧情章节</text>
+            </view>
+          </view>
+
+          <!-- 开始按钮 · 蜡笔填充风 -->
+          <view class="start-btn" style="background: {{item.color}};">
+            <text>进入故事</text>
+            <text class="btn-arrow">›</text>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 指示器 · 蜡笔圆点 -->
+  <view class="indicator-wrap">
+    <view 
+      wx:for="{{books}}" 
+      wx:key="id"
+      class="indicator-dot {{currentBookIndex === index ? 'active' : ''}}"
+      style="background: {{currentBookIndex === index ? item.color : ''}}"
+    >
+      <text wx:if="{{currentBookIndex === index}}" class="indicator-star">★</text>
+    </view>
+  </view>
+
+  <!-- 底部提示 · 手绘风 -->
+  <view class="bottom-tip">
+    <text class="tip-arrow-left">‹</text>
+    <text class="tip-text">左右滑动切换书籍</text>
+    <text class="tip-arrow-right">›</text>
+  </view>
+</view>

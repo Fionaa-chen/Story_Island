@@ -1,0 +1,320 @@
+<!--pages/story/story.wxml · 毛玻璃沉浸风-->
+<view class="story-page {{scene.textColorLight ? 'dark-scene' : ''}}" style="background: linear-gradient(180deg, {{scene.sceneBg.top || '#FFF8F0'}} 0%, {{scene.sceneBg.mid || '#FFF5EB'}} 50%, {{scene.sceneBg.bottom || '#FFF0E0'}} 100%);">
+  <!-- 剧情消息区 -->
+  <scroll-view 
+    class="story-area"
+    scroll-y
+    scroll-into-view="{{scrollToView}}"
+    scroll-with-animation
+    enhanced
+    show-scrollbar="{{false}}"
+    style="padding-bottom: {{storyEnded ? '180rpx' : (keyboardHeight > 0 ? keyboardHeight + 'px' : '0')}};"
+  >
+    <!-- 剧情场景介绍 · 蜡笔水彩纹理 -->
+    <view class="scene-intro">
+      <view class="scene-intro-texture"></view>
+      <view class="scene-badge" style="background: {{book.color}};">📖 剧情模式</view>
+      <view class="scene-chapter-title">{{scene.title}}</view>
+      <view class="scene-chapter-subtitle">{{scene.subtitle}}</view>
+      
+      <!-- 扮演角色信息 · 手绘边框 -->
+      <view class="player-info">
+        <view class="player-avatar-wrap" style="border-color: {{book.color}};">
+          <image class="player-avatar" src="{{role.avatar}}" mode="aspectFill" />
+        </view>
+        <view class="player-detail">
+          <view class="player-label">你扮演的角色</view>
+          <view class="player-name">{{role.name}} · {{role.title}}</view>
+        </view>
+      </view>
+
+      <!-- NPC列表 -->
+      <view class="npc-info">
+        <text class="npc-info-label">出场角色：</text>
+        <text 
+          wx:for="{{scene.npcs}}" 
+          wx:key="id"
+          class="npc-info-tag"
+        >{{item.name}}</text>
+      </view>
+
+      <!-- 手绘波浪分割线 -->
+      <view class="scene-divider">
+        <view class="divider-line-crayon"></view>
+        <text class="divider-text">🎬 剧情开始</text>
+        <view class="divider-line-crayon"></view>
+      </view>
+    </view>
+
+    <!-- 消息列表 -->
+    <view 
+      wx:for="{{messages}}" 
+      wx:key="id"
+      id="{{item.id}}"
+      class="story-message {{item.type}}-message"
+    >
+      <!-- 旁白 · 牛皮纸风 -->
+      <block wx:if="{{item.type === 'narrator'}}">
+        <view class="narrator-bubble">
+          <view class="narrator-icon">📜</view>
+          <view class="narrator-text">{{item.content}}</view>
+        </view>
+      </block>
+
+      <!-- NPC对话 · 毛玻璃气泡 + 头像 -->
+      <block wx:elif="{{item.type === 'npc'}}">
+        <view class="npc-bubble-wrap">
+          <view class="npc-avatar-col">
+            <view class="npc-avatar-circle" style="border-color: {{book.color}}40;">
+              <text class="npc-avatar-emoji">{{item.npcEmoji || '🎭'}}</text>
+            </view>
+          </view>
+          <view class="npc-content-col">
+            <view class="npc-name-badge" style="background: {{book.color}}20; color: {{book.color}};">
+              {{item.speakerName}}
+            </view>
+            <view class="npc-bubble">
+              <text class="npc-text">{{item.content}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 玩家行动 · 蜡笔涂色气泡 -->
+      <block wx:elif="{{item.type === 'player'}}">
+        <view class="player-bubble-wrap">
+          <view class="player-role-tag">
+            <image class="player-mini-avatar" src="{{role.avatar}}" mode="aspectFill" />
+            <text>{{role.name}}</text>
+          </view>
+          <view class="player-bubble" style="background: {{book.color}};">
+            <text class="player-text">{{item.content}}</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 系统提示 · 手写灰字 -->
+      <block wx:elif="{{item.type === 'system'}}">
+        <view class="system-bubble">
+          <text class="system-text">{{item.content}}</text>
+        </view>
+      </block>
+
+      <!-- 结局卡片 · 蜡笔水彩风 -->
+      <block wx:elif="{{item.type === 'ending'}}">
+        <view class="ending-card">
+          <!-- 终章旁白 -->
+          <view class="ending-card-narration" wx:if="{{item.endingData.narration}}">
+            <view class="ending-card-badge">📜 终章</view>
+            <text class="ending-card-narration-text">{{item.endingData.narration}}</text>
+          </view>
+          <!-- THE END 分隔 · 手绘风 -->
+          <view class="ending-card-separator">
+            <view class="ending-sep-line"></view>
+            <text class="ending-sep-text">THE END</text>
+            <view class="ending-sep-line"></view>
+          </view>
+          <!-- 结局达成 -->
+          <view class="ending-card-result" wx:if="{{item.endingData.title}}">
+            <text class="ending-card-title">🏆 结局达成：{{item.endingData.title}}</text>
+          </view>
+          <!-- 点评 -->
+          <view class="ending-card-comment" wx:if="{{item.endingData.comment}}">
+            <text class="ending-card-comment-text">📖 {{item.endingData.comment}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 图片生成进度提示 -->
+    <view class="round-image-hint" wx:if="{{roundImageHint && !storyEnded}}" id="round-image-hint">
+      <text class="round-image-hint-text">{{roundImageHint}}</text>
+    </view>
+
+    <!-- AI正在思考 · 蜡笔铅笔动画 -->
+    <view class="story-message narrator-message" wx:if="{{isTyping}}">
+      <view class="narrator-bubble typing">
+        <view class="narrator-icon">✏️</view>
+        <view class="typing-text">
+          <text>剧情展开中</text>
+          <view class="typing-dots-inline">
+            <view class="dot dot1" style="background: {{book.color}};"></view>
+            <view class="dot dot2" style="background: {{book.color}};"></view>
+            <view class="dot dot3" style="background: {{book.color}};"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 结局分割线 · 手绘波浪线 -->
+    <view class="ending-divider" wx:if="{{storyEnded}}" id="ending-divider">
+      <view class="divider-line-crayon"></view>
+      <text class="divider-text">🎬 本章完</text>
+      <view class="divider-line-crayon"></view>
+    </view>
+
+    <!-- 选项面板 · 蜡笔涂鸦风 -->
+    <view class="choices-panel {{storyEnded ? 'ending-choices' : ''}}" wx:if="{{showChoices && currentChoices.length > 0 && !isTyping}}" id="choices-panel">
+      <view class="choices-header">
+        <text class="choices-icon">{{storyEnded ? '🌟' : '🎯'}}</text>
+        <text class="choices-title">{{storyEnded ? '接下来...' : '你要怎么做？'}}</text>
+      </view>
+      <view class="choices-list">
+        <view 
+          wx:for="{{currentChoices}}" 
+          wx:key="id"
+          class="choice-item {{storyEnded ? 'ending-choice-item' : ''}}"
+          style="border-color: {{book.color}}25; transform: rotate({{index % 2 === 0 ? '0.2' : '-0.2'}}deg);"
+          data-index="{{index}}"
+          bindtap="onChoiceTap"
+        >
+          <text class="choice-text">{{item.text}}</text>
+          <text class="choice-hint" wx:if="{{item.hint}}">{{item.hint}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 自由输入面板 · 手绘边框 -->
+    <view class="custom-input-panel" wx:if="{{showCustomInput && !isTyping && !storyEnded}}" id="custom-input-panel">
+      <view class="custom-header">
+        <text class="custom-title">✏️ 描述你的行动</text>
+        <view class="custom-cancel" bindtap="onCancelCustomInput">
+          <text>‹ 返回选项</text>
+        </view>
+      </view>
+      <view class="custom-input-wrap">
+        <input 
+          class="custom-input"
+          type="text"
+          placeholder="你想做什么..."
+          placeholder-class="custom-placeholder"
+          value="{{inputText}}"
+          bindinput="onInputChange"
+          bindfocus="onInputFocus"
+          bindblur="onInputBlur"
+          bindconfirm="onSend"
+          confirm-type="send"
+          adjust-position="{{false}}"
+          cursor-spacing="20"
+          focus="{{showCustomInput}}"
+        />
+        <view 
+          class="custom-send-btn {{inputText.length > 0 ? 'active' : ''}}"
+          style="background: {{inputText.length > 0 ? book.color : ''}};"
+          bindtap="onSend"
+        >
+          <text class="send-icon">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view style="height: 60rpx;"></view>
+  </scroll-view>
+
+  <!-- ====== 结局底部固定 Tab 栏 · 蜡笔涂色风 ====== -->
+  <view class="ending-tab-bar" wx:if="{{storyEnded && endingTabs.length > 0}}">
+    <view 
+      class="ending-tab-item {{item.id === 'generate_grid' ? 'tab-primary' : ''}}"
+      wx:for="{{endingTabs}}"
+      wx:key="id"
+      style="{{item.id === 'generate_grid' ? 'background:' + book.color + ';' : ''}}"
+      data-id="{{item.id}}"
+      data-next-scene-id="{{item.nextSceneId || ''}}"
+      bindtap="onEndingTabTap"
+    >
+      <text class="ending-tab-icon">{{item.icon}}</text>
+      <text class="ending-tab-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- ====== Tolan 梦幻画卷全屏页 · 方案C：基于 book.color 的深色主题 ====== -->
+  <view class="ending-fullscreen {{showEndingFullscreen ? 'show' : ''}}" wx:if="{{storyEnded}}">
+    <!-- 深色底纹背景（基于 book.color 衍生） -->
+    <view class="ending-fs-bg" style="background: linear-gradient(170deg, {{endingDarkColors.bgTop}} 0%, {{endingDarkColors.bgBottom}} 100%);">
+      <!-- 经典原文纹理层已移除，只保留纯色渐变背景 -->
+    </view>
+
+    <!-- 结局名称 · 融入背景的题字 -->
+    <text class="ending-fs-ambient-title" wx:if="{{endingInfo && endingInfo.title}}"
+          style="color: {{endingDarkColors.titleColor}};">
+      {{endingInfo.title}}
+    </text>
+
+    <!-- 右上角×关闭 -->
+    <view class="ending-fs-close" bindtap="onCloseEndingFullscreen"
+          style="background: {{endingDarkColors.closeBg}}; border-color: rgba(255,255,255,0.15);">
+      <text class="ending-fs-close-icon" style="color: {{endingDarkColors.closeIcon}};">✕</text>
+    </view>
+
+    <!-- 中央悬浮画框 -->
+    <view class="ending-fs-frame" style="border-color: {{endingDarkColors.frameBorder}}; box-shadow: 0 8rpx 40rpx {{endingDarkColors.frameShadow}};">
+
+      <!-- 加载中状态 -->
+      <view class="ending-fs-loading" wx:if="{{endingGrid.status === 'generating_images'}}">
+        <view class="ending-fs-spinner-wrap">
+          <view class="ending-fs-spinner-dot" style="background: {{endingDarkColors.spinnerDot}};"></view>
+          <view class="ending-fs-spinner-dot" style="background: {{endingDarkColors.spinnerDot}};"></view>
+          <view class="ending-fs-spinner-dot" style="background: {{endingDarkColors.spinnerDot}};"></view>
+        </view>
+        <text class="ending-fs-loading-text" style="color: {{endingDarkColors.loadingText}};">正在绘制中... {{endingGrid.loadedCount}}/5</text>
+      </view>
+
+      <!-- 2行3列网格 · 5张方形插画 -->
+      <view class="ending-fs-grid">
+        <view class="ending-fs-grid-item" 
+              wx:for="{{5}}" wx:key="index"
+              wx:for-index="idx"
+              data-index="{{idx}}"
+              bindtap="onPreviewSingleImage">
+          <image wx:if="{{endingGrid.images[idx]}}" 
+                 class="ending-fs-grid-img {{endingGrid.status === 'done' ? 'visible' : (endingGrid.images[idx] ? 'visible' : '')}}" 
+                 src="{{endingGrid.images[idx]}}" 
+                 mode="aspectFill" 
+                 lazy-load />
+          <view wx:else class="ending-fs-placeholder" style="background: {{endingDarkColors.placeholderBg}};">
+            <view class="placeholder-pulse" style="border-color: {{endingDarkColors.placeholderBorder}};"></view>
+          </view>
+        </view>
+        <!-- 第6格留空 -->
+        <view class="ending-fs-grid-item ending-fs-grid-empty-slot" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08);"></view>
+      </view>
+
+      <!-- 生成失败 -->
+      <view class="ending-fs-error" wx:if="{{endingGrid.status === 'error'}}">
+        <text class="ending-fs-error-text" style="color: {{endingDarkColors.loadingText}};">{{endingGrid.errorMsg || '画卷生成失败'}}</text>
+        <view class="ending-fs-retry-btn" style="background: {{endingDarkColors.btnBg}}; color: {{endingDarkColors.btnText}};" bindtap="onRetryGrid">
+          <text>🔄 重新生成</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 结局点评 · 融入背景的氛围文字 -->
+    <text class="ending-fs-ambient-comment" wx:if="{{endingInfo && endingInfo.comment}}"
+          style="color: {{endingDarkColors.commentColor}};">
+      {{endingInfo.comment}}
+    </text>
+
+    <!-- 操作按钮 · 极简胶囊 -->
+    <view class="ending-fs-actions">
+      <view class="ending-fs-action-btn ending-fs-save-btn" bindtap="onSaveGrid"
+            style="background: {{endingDarkColors.btnBg}}; border-color: {{endingDarkColors.btnBorder}}; color: {{endingDarkColors.btnText}};">
+        <text>💾 保存相册</text>
+      </view>
+      <button class="ending-fs-action-btn ending-fs-share-btn"
+              style="background: {{endingDarkColors.btnBg}} !important; border-color: {{endingDarkColors.btnBorder}} !important; color: {{endingDarkColors.btnText}} !important;"
+              open-type="share">
+        <text>📤 分享好友</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 隐藏的 Canvas -->
+  <canvas 
+    wx:if="{{storyEnded}}" 
+    type="2d" 
+    id="gridCanvas" 
+    class="grid-canvas-hidden"
+    style="width: 750px; height: 1334px;"
+  ></canvas>
+</view>

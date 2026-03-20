@@ -1,0 +1,9 @@
+{
+  "name": "imageGen",
+  "version": "1.0.0",
+  "description": "AI 文生图云函数 - 调用硅基流动 SiliconFlow Kwai-Kolors API 生成故事插画配图",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.4.0"
+  }
+}
