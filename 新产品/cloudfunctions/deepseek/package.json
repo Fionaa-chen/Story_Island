@@ -1,0 +1,9 @@
+{
+  "name": "deepseek",
+  "version": "1.0.0",
+  "description": "DeepSeek AI 云函数 - 用于调用 DeepSeek 大模型 API 生成互动剧情",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.4.0"
+  }
+}
